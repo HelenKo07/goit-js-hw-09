@@ -5,7 +5,6 @@ textareaForm.classList.add('textarea-form-message');
 const buttonForm = document.querySelector('button');
 buttonForm.classList.add('btn-form-submit');
 
-
 const feedbackFormEl = document.querySelector('.feedback-form');
 let formData = {
   email: '',
@@ -14,15 +13,15 @@ let formData = {
 
 const fillFormFields = () => {
   try {
-    if (localStorage.length === 0) {
-      return;
-    }
-
     const formStateFromLS = JSON.parse(
       localStorage.getItem('feedback-form-state')
     );
-    formData = formStateFromLS;
 
+    if (formStateFromLS === null) {
+      return;
+    }
+
+    formData = formStateFromLS;
     for (const key in formStateFromLS) {
       feedbackFormEl.elements[key].value = formStateFromLS[key];
     }
@@ -45,19 +44,19 @@ const onFormFieldInput = event => {
 };
 
 const onFeedbackFormSubmit = event => {
-if (formData.email === '' || formData.message === '') {
+  event.preventDefault();
+
+  if (formData.email === '' || formData.message === '') {
     alert('Fill please all fields');
   } else {
     console.log(formData);
   }
-    event.preventDefault();
 
-    const {currentTarget: formEl} = event;
+  const { currentTarget: formEl } = event;
 
-    formEl.reset();
-    localStorage.removeItem('feedback-form-state');
+  formEl.reset();
+  localStorage.removeItem('feedback-form-state');
 };
 
 feedbackFormEl.addEventListener('input', onFormFieldInput);
 feedbackFormEl.addEventListener('submit', onFeedbackFormSubmit);
-
